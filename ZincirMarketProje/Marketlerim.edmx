@@ -1,0 +1,400 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Marketlerim.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="DepolarSet">
+          <Key>
+            <PropertyRef Name="DepoId" />
+          </Key>
+          <Property Name="DepoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ürünIsimleri" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DepoSorumlusu" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ürünId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MagazalarSet">
+          <Key>
+            <PropertyRef Name="MagazaId" />
+          </Key>
+          <Property Name="MagazaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Sehir" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Telefon" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Ulke" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="AracPlaka" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MüsteriSet">
+          <Key>
+            <PropertyRef Name="müsteriId" />
+          </Key>
+          <Property Name="müsteriId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdSoyad" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Telefon" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Sehir" Type="nvarchar(max)" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PersonellerSet">
+          <Key>
+            <PropertyRef Name="personelId" />
+          </Key>
+          <Property Name="personelId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AdSoyad" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Sehir" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Maas" Type="int" Nullable="false" />
+          <Property Name="iseGirisTarihi" Type="datetime" Nullable="false" />
+          <Property Name="MagazaId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SevkiyatSet">
+          <Key>
+            <PropertyRef Name="AracPlaka" />
+          </Key>
+          <Property Name="AracPlaka" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SürücüAdSoyad" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Telefon" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Maas" Type="int" Nullable="false" />
+          <Property Name="Vardiya" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="DepoId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="UrünlerSet">
+          <Key>
+            <PropertyRef Name="ürünId" />
+          </Key>
+          <Property Name="ürünId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ürünCinsi" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="ürünFiyati" Type="int" Nullable="false" />
+          <Property Name="müsteriId" Type="int" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_DepolarSevkiyat">
+          <End Role="DepolarSet" Type="Self.DepolarSet" Multiplicity="1" />
+          <End Role="SevkiyatSet" Type="Self.SevkiyatSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DepolarSet">
+              <PropertyRef Name="DepoId" />
+            </Principal>
+            <Dependent Role="SevkiyatSet">
+              <PropertyRef Name="DepoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MagazalarPersoneller">
+          <End Role="MagazalarSet" Type="Self.MagazalarSet" Multiplicity="1" />
+          <End Role="PersonellerSet" Type="Self.PersonellerSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MagazalarSet">
+              <PropertyRef Name="MagazaId" />
+            </Principal>
+            <Dependent Role="PersonellerSet">
+              <PropertyRef Name="MagazaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_MüsteriUrünler">
+          <End Role="MüsteriSet" Type="Self.MüsteriSet" Multiplicity="1" />
+          <End Role="UrünlerSet" Type="Self.UrünlerSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="MüsteriSet">
+              <PropertyRef Name="müsteriId" />
+            </Principal>
+            <Dependent Role="UrünlerSet">
+              <PropertyRef Name="müsteriId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_SevkiyatMagazalar">
+          <End Role="SevkiyatSet" Type="Self.SevkiyatSet" Multiplicity="1" />
+          <End Role="MagazalarSet" Type="Self.MagazalarSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SevkiyatSet">
+              <PropertyRef Name="AracPlaka" />
+            </Principal>
+            <Dependent Role="MagazalarSet">
+              <PropertyRef Name="AracPlaka" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_UrünlerDepolar">
+          <End Role="UrünlerSet" Type="Self.UrünlerSet" Multiplicity="1" />
+          <End Role="DepolarSet" Type="Self.DepolarSet" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="UrünlerSet">
+              <PropertyRef Name="ürünId" />
+            </Principal>
+            <Dependent Role="DepolarSet">
+              <PropertyRef Name="ürünId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="MarketlerimStoreContainer">
+          <EntitySet Name="DepolarSet" EntityType="Self.DepolarSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MagazalarSet" EntityType="Self.MagazalarSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="MüsteriSet" EntityType="Self.MüsteriSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PersonellerSet" EntityType="Self.PersonellerSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SevkiyatSet" EntityType="Self.SevkiyatSet" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="UrünlerSet" EntityType="Self.UrünlerSet" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_DepolarSevkiyat" Association="Self.FK_DepolarSevkiyat">
+            <End Role="DepolarSet" EntitySet="DepolarSet" />
+            <End Role="SevkiyatSet" EntitySet="SevkiyatSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MagazalarPersoneller" Association="Self.FK_MagazalarPersoneller">
+            <End Role="MagazalarSet" EntitySet="MagazalarSet" />
+            <End Role="PersonellerSet" EntitySet="PersonellerSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_MüsteriUrünler" Association="Self.FK_MüsteriUrünler">
+            <End Role="MüsteriSet" EntitySet="MüsteriSet" />
+            <End Role="UrünlerSet" EntitySet="UrünlerSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_SevkiyatMagazalar" Association="Self.FK_SevkiyatMagazalar">
+            <End Role="SevkiyatSet" EntitySet="SevkiyatSet" />
+            <End Role="MagazalarSet" EntitySet="MagazalarSet" />
+          </AssociationSet>
+          <AssociationSet Name="FK_UrünlerDepolar" Association="Self.FK_UrünlerDepolar">
+            <End Role="UrünlerSet" EntitySet="UrünlerSet" />
+            <End Role="DepolarSet" EntitySet="DepolarSet" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2009/11/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="Marketlerim" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" annotation:UseStrongSpatialTypes="false">
+        <EntityContainer Name="MarketlerimContainer" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="PersonellerSet" EntityType="Marketlerim.Personeller" />
+          <EntitySet Name="MagazalarSet" EntityType="Marketlerim.Magazalar" />
+          <EntitySet Name="SevkiyatSet" EntityType="Marketlerim.Sevkiyat" />
+          <EntitySet Name="DepolarSet" EntityType="Marketlerim.Depolar" />
+          <EntitySet Name="UrünlerSet" EntityType="Marketlerim.Urünler" />
+          <EntitySet Name="MüsteriSet" EntityType="Marketlerim.Müsteri" />
+          <AssociationSet Name="MagazalarPersoneller" Association="Marketlerim.MagazalarPersoneller">
+            <End Role="Magazalar" EntitySet="MagazalarSet" />
+            <End Role="Personeller" EntitySet="PersonellerSet" />
+          </AssociationSet>
+          <AssociationSet Name="SevkiyatMagazalar" Association="Marketlerim.SevkiyatMagazalar">
+            <End Role="Sevkiyat" EntitySet="SevkiyatSet" />
+            <End Role="Magazalar" EntitySet="MagazalarSet" />
+          </AssociationSet>
+          <AssociationSet Name="DepolarSevkiyat" Association="Marketlerim.DepolarSevkiyat">
+            <End Role="Depolar" EntitySet="DepolarSet" />
+            <End Role="Sevkiyat" EntitySet="SevkiyatSet" />
+          </AssociationSet>
+          <AssociationSet Name="UrünlerDepolar" Association="Marketlerim.UrünlerDepolar">
+            <End Role="Urünler" EntitySet="UrünlerSet" />
+            <End Role="Depolar" EntitySet="DepolarSet" />
+          </AssociationSet>
+          <AssociationSet Name="MüsteriUrünler" Association="Marketlerim.MüsteriUrünler">
+            <End Role="Müsteri" EntitySet="MüsteriSet" />
+            <End Role="Urünler" EntitySet="UrünlerSet" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Personeller">
+          <Key>
+            <PropertyRef Name="personelId" />
+          </Key>
+          <Property Name="personelId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdSoyad" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Sehir" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Maas" Type="Int32" Nullable="false" />
+          <Property Name="iseGirisTarihi" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="MagazaId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Magazalar">
+          <Key>
+            <PropertyRef Name="MagazaId" />
+          </Key>
+          <Property Name="MagazaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Sehir" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Telefon" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Ulke" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="AracPlaka" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Sevkiyat">
+          <Key>
+            <PropertyRef Name="AracPlaka" />
+          </Key>
+          <Property Name="AracPlaka" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SürücüAdSoyad" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Telefon" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Maas" Type="Int32" Nullable="false" />
+          <Property Name="Vardiya" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="DepoId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Depolar">
+          <Key>
+            <PropertyRef Name="DepoId" />
+          </Key>
+          <Property Name="DepoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ürünIsimleri" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="DepoSorumlusu" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ürünId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Urünler">
+          <Key>
+            <PropertyRef Name="ürünId" />
+          </Key>
+          <Property Name="ürünId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ürünCinsi" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="ürünFiyati" Type="Int32" Nullable="false" />
+          <Property Name="müsteriId" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Müsteri">
+          <Key>
+            <PropertyRef Name="müsteriId" />
+          </Key>
+          <Property Name="müsteriId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AdSoyad" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Telefon" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="Sehir" Type="String" Nullable="false" MaxLength="Max" Unicode="true" FixedLength="false" />
+        </EntityType>
+        <Association Name="MagazalarPersoneller">
+          <End Type="Marketlerim.Magazalar" Role="Magazalar" Multiplicity="1" />
+          <End Type="Marketlerim.Personeller" Role="Personeller" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Magazalar">
+              <PropertyRef Name="MagazaId" />
+            </Principal>
+            <Dependent Role="Personeller">
+              <PropertyRef Name="MagazaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SevkiyatMagazalar">
+          <End Type="Marketlerim.Sevkiyat" Role="Sevkiyat" Multiplicity="1" />
+          <End Type="Marketlerim.Magazalar" Role="Magazalar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Sevkiyat">
+              <PropertyRef Name="AracPlaka" />
+            </Principal>
+            <Dependent Role="Magazalar">
+              <PropertyRef Name="AracPlaka" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DepolarSevkiyat">
+          <End Type="Marketlerim.Depolar" Role="Depolar" Multiplicity="1" />
+          <End Type="Marketlerim.Sevkiyat" Role="Sevkiyat" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Depolar">
+              <PropertyRef Name="DepoId" />
+            </Principal>
+            <Dependent Role="Sevkiyat">
+              <PropertyRef Name="DepoId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UrünlerDepolar">
+          <End Type="Marketlerim.Urünler" Role="Urünler" Multiplicity="1" />
+          <End Type="Marketlerim.Depolar" Role="Depolar" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Urünler">
+              <PropertyRef Name="ürünId" />
+            </Principal>
+            <Dependent Role="Depolar">
+              <PropertyRef Name="ürünId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MüsteriUrünler">
+          <End Type="Marketlerim.Müsteri" Role="Müsteri" Multiplicity="1" />
+          <End Type="Marketlerim.Urünler" Role="Urünler" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Müsteri">
+              <PropertyRef Name="müsteriId" />
+            </Principal>
+            <Dependent Role="Urünler">
+              <PropertyRef Name="müsteriId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="MarketlerimStoreContainer" CdmEntityContainer="MarketlerimContainer">
+    <EntitySetMapping Name="PersonellerSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Marketlerim.Personeller)">
+        <MappingFragment StoreEntitySet="PersonellerSet">
+          <ScalarProperty Name="personelId" ColumnName="personelId" />
+          <ScalarProperty Name="AdSoyad" ColumnName="AdSoyad" />
+          <ScalarProperty Name="Sehir" ColumnName="Sehir" />
+          <ScalarProperty Name="Maas" ColumnName="Maas" />
+          <ScalarProperty Name="iseGirisTarihi" ColumnName="iseGirisTarihi" />
+          <ScalarProperty Name="MagazaId" ColumnName="MagazaId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MagazalarSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Marketlerim.Magazalar)">
+        <MappingFragment StoreEntitySet="MagazalarSet">
+          <ScalarProperty Name="MagazaId" ColumnName="MagazaId" />
+          <ScalarProperty Name="Sehir" ColumnName="Sehir" />
+          <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+          <ScalarProperty Name="Ulke" ColumnName="Ulke" />
+          <ScalarProperty Name="AracPlaka" ColumnName="AracPlaka" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="SevkiyatSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Marketlerim.Sevkiyat)">
+        <MappingFragment StoreEntitySet="SevkiyatSet">
+          <ScalarProperty Name="AracPlaka" ColumnName="AracPlaka" />
+          <ScalarProperty Name="SürücüAdSoyad" ColumnName="SürücüAdSoyad" />
+          <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+          <ScalarProperty Name="Maas" ColumnName="Maas" />
+          <ScalarProperty Name="Vardiya" ColumnName="Vardiya" />
+          <ScalarProperty Name="DepoId" ColumnName="DepoId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="DepolarSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Marketlerim.Depolar)">
+        <MappingFragment StoreEntitySet="DepolarSet">
+          <ScalarProperty Name="DepoId" ColumnName="DepoId" />
+          <ScalarProperty Name="ürünIsimleri" ColumnName="ürünIsimleri" />
+          <ScalarProperty Name="DepoSorumlusu" ColumnName="DepoSorumlusu" />
+          <ScalarProperty Name="ürünId" ColumnName="ürünId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UrünlerSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Marketlerim.Urünler)">
+        <MappingFragment StoreEntitySet="UrünlerSet">
+          <ScalarProperty Name="ürünId" ColumnName="ürünId" />
+          <ScalarProperty Name="ürünCinsi" ColumnName="ürünCinsi" />
+          <ScalarProperty Name="ürünFiyati" ColumnName="ürünFiyati" />
+          <ScalarProperty Name="müsteriId" ColumnName="müsteriId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="MüsteriSet">
+      <EntityTypeMapping TypeName="IsTypeOf(Marketlerim.Müsteri)">
+        <MappingFragment StoreEntitySet="MüsteriSet">
+          <ScalarProperty Name="müsteriId" ColumnName="müsteriId" />
+          <ScalarProperty Name="AdSoyad" ColumnName="AdSoyad" />
+          <ScalarProperty Name="Telefon" ColumnName="Telefon" />
+          <ScalarProperty Name="Sehir" ColumnName="Sehir" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+        <DesignerProperty Name="UseLegacyProvider" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
